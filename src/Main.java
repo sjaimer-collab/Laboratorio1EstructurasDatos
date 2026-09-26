@@ -1,28 +1,57 @@
+
+
+import edu.unal.ed.interfaces.Operation;
+import edu.unal.ed.listas.SinglyLinkedList;
 import java.time.Instant;
 import java.time.Duration;
+import java.util.Random;
 
 public class Main {
 
     public static void exec(int size, String method, Operation operation) {
-        Instant start = Instant.now();
+        Random rand = new Random();
 
-        for (int i =0; i<size; i++)
-            operation.apply(i);
+        // Generamos los datos antes de iniciar la medición
+        int[] datosAleatorios = new int[size];
 
-        Instant finish = Instant.now();
-        long timeElapsed = Duration.between(start, finish).toMillis();
-        System.out.printf("Se ejecutó %s de %d elementos en: %d milisegundos\n", method, size, timeElapsed);
+        for (int i = 0; i < size; i++) {
+            datosAleatorios[i] = rand.nextInt(100000);
+        }
+
+        // Iniciar Cronometro
+        long start = System.nanoTime();
+
+        // Medicion de la Operacion
+        for (int i = 0; i < size; i++) {
+            operation.apply(datosAleatorios[i]);
+        }
+
+        // Se detiene el cronometro
+        long finish = System.nanoTime();
+        long timeElapsed = finish - start;
+
+        System.out.printf(
+                "Se ejecutó %s de %d elementos en: %d nanosegundos%n",
+                method, size, timeElapsed
+        );
     }
 
     public static void main(String[] args) {
-        final int start = 100;
-        final int end = 10000;
+        // Va creciendo en potencias de 10
+        final int startSize = 10;
+        final int endSize = 100000; // limite
 
-        for (int size = start; size <= end; size *= 10)
-            for (int i =0; i<5; i++){
-                ListaArrEsta lista = new ListaArrEsta(size);
-                exec(size, "addFirst", lista::addFirst);
+        System.out.println("--- PRUEBAS DE COMPLEJIDAD: SinglyLinkedList (Sin Cola) ---");
+
+        for (int size = startSize; size <= endSize; size *= 10) {
+            // se repite 5 veces para promediar
+            for (int i = 0; i < 5; i++) {
+                SinglyLinkedList<Integer> lista = new SinglyLinkedList<>();
+
+                // se le pasa todo a la funcion exec
+                exec(size, "PushFront", lista::pushFront);
             }
-
+            System.out.println("---------------------------------------------------------");
+        }
     }
 }
