@@ -1,15 +1,28 @@
-//TIP To <b>Run</b> code, press <shortcut actionId="Run"/> or
-// click the <icon src="AllIcons.Actions.Execute"/> icon in the gutter.
-public class Main {
-    public static void main(String[] args) {
-        //TIP Press <shortcut actionId="ShowIntentionActions"/> with your caret at the highlighted text
-        // to see how IntelliJ IDEA suggests fixing it.
-        System.out.printf("Hello and welcome!");
+import java.time.Instant;
+import java.time.Duration;
 
-        for (int i = 1; i <= 5; i++) {
-            //TIP Press <shortcut actionId="Debug"/> to start debugging your code. We have set one <icon src="AllIcons.Debugger.Db_set_breakpoint"/> breakpoint
-            // for you, but you can always add more by pressing <shortcut actionId="ToggleLineBreakpoint"/>.
-            System.out.println("i = " + i);
-        }
+public class Main {
+
+    public static void exec(int size, String method, Operation operation) {
+        Instant start = Instant.now();
+
+        for (int i =0; i<size; i++)
+            operation.apply(i);
+
+        Instant finish = Instant.now();
+        long timeElapsed = Duration.between(start, finish).toMillis();
+        System.out.printf("Se ejecutó %s de %d elementos en: %d milisegundos\n", method, size, timeElapsed);
+    }
+
+    public static void main(String[] args) {
+        final int start = 100;
+        final int end = 10000;
+
+        for (int size = start; size <= end; size *= 10)
+            for (int i =0; i<5; i++){
+                ListaArrEsta lista = new ListaArrEsta(size);
+                exec(size, "addFirst", lista::addFirst);
+            }
+
     }
 }
