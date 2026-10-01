@@ -12,5 +12,5 @@ public interface MyQueue<T> {
 
     int size();
 
-    void delete(int n);
+    void delete(T n);
 }
